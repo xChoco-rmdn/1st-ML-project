@@ -1,15 +1,18 @@
 import sys
+import os
+import numpy as np
+import pandas as pd
+import dill
+from src.exception import CustomException
 
+def save_object(file_path, obj):
+    try:
+        dir_path = os.path.dirname(file_path)
+        os.makedirs(dir_path, exist_ok=True)
 
-def error_message_detail(error, error_detail: sys):
-    _, _, exc_tb = error_detail.exc_info()
-    error_message = f"Error occured in python script [{0}] line number [{1}] error message[{2}]".format()
-    file_name = exc_tb.tb_frame,str(error)
+        with open(file_path, "wb") as file_obj:
+            dill.dump(obj, file_obj)
 
-    return error_message
-
-
-class CustomException(Exception):
-    def __init__(self, error_message, error_detail:sys):
-        super.__init__(error_message)
-        selft.error_message = error_message_detail(())
+    except Exception as e:
+        raise CustomException(e, sys)
+    
